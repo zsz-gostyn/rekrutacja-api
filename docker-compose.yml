@@ -1,0 +1,20 @@
+rekrutacja-web:
+    build: ./docker/php
+    container_name: rekrutacja-web
+    ports:
+        - 80:80
+    volumes:
+        - "./public:/var/www/html:rw"
+    links:
+        - rekrutacja-mysql
+
+rekrutacja-mysql:
+    image: vsamov/mysql-5.1.73
+    container_name: rekrutacja-mysql
+    ports:
+        - 3306:3306
+    environment:
+        - MYSQL_ROOT_PASSWORD=rekrutacja
+        - MYSQL_DATABASE=rekrutacja
+        - MYSQL_USER=rekrutacja
+        - MYSQL_PASSWORD=rekrutacja
