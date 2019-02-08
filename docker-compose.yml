@@ -6,7 +6,8 @@ services:
         ports:
             - 80:80
         volumes:
-            - "./public:/var/www/html:rw"
+            - ".:/var/www/html:rw"
+            - "./docker/apache/apache-config.conf:/etc/apache2/sites-enabled/000-default.conf:ro"
         links:
             - rekrutacja-mysql
 
