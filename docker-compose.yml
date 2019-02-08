@@ -1,13 +1,13 @@
 version: '3'
 services:
     rekrutacja-web:
-        build: ./docker/php
+        build: ./docker/web
         container_name: rekrutacja-web
         ports:
             - 80:80
         volumes:
             - ".:/var/www/html:rw"
-            - "./docker/apache/apache-config.conf:/etc/apache2/sites-enabled/000-default.conf:ro"
+            - "./docker/web/apache-config.conf:/etc/apache2/sites-enabled/000-default.conf:ro"
         links:
             - rekrutacja-mysql
 
