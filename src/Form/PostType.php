@@ -17,7 +17,6 @@ class PostType extends AbstractType
             ->add('ordinal', IntegerType::class)
             ->add('topic', TextType::class)
             ->add('content', TextType::class)
-            ->add('creation_date', DateTimeType::class, ['widget' => 'single_text'])
             ->add('active', CheckboxType::class)
         ;
     }

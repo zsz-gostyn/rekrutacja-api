@@ -37,11 +37,11 @@ class PostController extends AbstractController
     public function add(Request $request)
     {
         $post = new Post();
+        $post->setCreationDate(new \DateTime());
 
         $form = $this->createForm(PostType::class, $post);
         $form->submit(json_decode($request->getContent(), true));
 
-        
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($post);
@@ -61,7 +61,7 @@ class PostController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $post = $entityManager->getRepository(Post::class)->find($id);
-
+        
         if (!$post) {
             return $this->json([
                 'message' => 'Post o podanym id nie istnieje'
@@ -70,7 +70,7 @@ class PostController extends AbstractController
 
         $form = $this->createForm(PostType::class, $post);
         $form = $form->submit(json_decode($request->getContent(), true));
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 

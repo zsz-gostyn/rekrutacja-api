@@ -15,9 +15,4 @@ App\Entity\Post:
         content:
             - NotBlank:
                 message: 'Treść nie może być pusta'
-        creation_date:
-            - NotBlank:
-                message: 'Data nie może być pusta'
-            - DateTime:
-                message: 'Należy podać poprawną datę'
 
