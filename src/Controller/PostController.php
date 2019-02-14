@@ -11,10 +11,13 @@ use App\Form\PostType;
 
 class PostController extends AbstractController
 {
-    public function showAll()
+    public function showAll(Request $request)
     {
-        $posts = $this->getDoctrine()->getRepository(Post::class)->findAll();
-        
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 2);
+    
+        $posts = $this->getDoctrine()->getRepository(Post::class)->findBy([], [], $limit, $offset);
+
         return $this->json([
             'data' => $posts,
             'count' => count($posts)
