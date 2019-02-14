@@ -15,12 +15,14 @@ class PostController extends AbstractController
     {
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', 2);
-    
-        $posts = $this->getDoctrine()->getRepository(Post::class)->findBy([], [], $limit, $offset);
+        
+        $repository = $this->getDoctrine()->getRepository(Post::class);
+        $posts = $repository->findBy([], [], $limit, $offset);
+        $totalPostsAmount = $repository->countBy([]);
 
         return $this->json([
             'data' => $posts,
-            'count' => count($posts)
+            'count' => $totalPostsAmount
         ]);
     }
 

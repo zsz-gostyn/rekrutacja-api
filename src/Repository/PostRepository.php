@@ -19,6 +19,12 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
+    public function countBy($criteria)
+    {
+        $persister = $this->_em->getUnitOfWork()->getEntityPersister($this->_entityName);
+        return $persister->count($criteria);
+    }
+
     // /**
     //  * @return Post[] Returns an array of Post objects
     //  */
