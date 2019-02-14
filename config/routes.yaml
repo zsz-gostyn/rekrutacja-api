@@ -1,3 +1,31 @@
-index:
-    path: /
-    controller: App\Controller\DefaultController::index
+api_posts_show_all:
+    path: /posts
+    controller: App\Controller\PostController::showAll
+    methods: [GET]
+
+api_post_show_one:
+    path: /posts/{id}
+    controller: App\Controller\PostController::showOne
+    methods: [GET]
+    requirements:
+        id: '\d+'
+
+api_post_add:
+    path: /posts
+    controller: App\Controller\PostController::add
+    methods: [POST]
+
+api_post_update:
+    path: /posts/{id}
+    controller: App\Controller\PostController::update
+    methods: [PUT]
+    requirements:
+        id: '\d+'
+
+api_post_delete:
+    path: /posts/{id}
+    controller: App\Controller\PostController::delete
+    methods: [DELETE]
+    requirements:
+        id: '\d+'
+

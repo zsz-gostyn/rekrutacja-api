@@ -87,7 +87,7 @@ class Post
         return $this->creation_date;
     }
 
-    public function setCreationDate(\DateTimeInterface $creation_date): self
+    public function setCreationDate(\DateTimeInterface $creation_date = null): self
     {
         $this->creation_date = $creation_date;
 

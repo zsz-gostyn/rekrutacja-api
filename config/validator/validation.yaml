@@ -1,0 +1,23 @@
+App\Entity\Post:
+    properties:
+        ordinal:
+            - NotBlank:
+                message: 'Liczba porządkowa nie może być pusta'
+            - GreaterThanOrEqual:
+                value: 1
+                message: 'Liczba porządkowa musi być dodatnią liczbą naturalną'
+        topic:
+            - NotBlank:
+                message: 'Temat nie może być pusty'
+            - Length:
+                max: 255
+                maxMessage: 'Temat nie może być dłuższy, niż 255 znaków'
+        content:
+            - NotBlank:
+                message: 'Treść nie może być pusta'
+        creation_date:
+            - NotBlank:
+                message: 'Data nie może być pusta'
+            - DateTime:
+                message: 'Należy podać poprawną datę'
+
