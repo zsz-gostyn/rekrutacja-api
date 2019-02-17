@@ -1,4 +1,4 @@
-api_posts_show_all:
+api_post_show_all:
     path: /posts
     controller: App\Controller\PostController::showAll
     methods: [GET]
@@ -29,3 +29,20 @@ api_post_delete:
     requirements:
         id: '\d+'
 
+
+api_subscriber_show_all:
+    path: /subscribers
+    controller: App\Controller\SubscriberController::showAll
+    methods: [GET]
+
+api_subscriber_show_one:
+    path: /subscribers/{id}
+    controller: App\Controller\SubscriberController::showOne
+    methods: [GET]
+    requirements:
+        id: '\d+'
+
+api_subscriber_add:
+    path: /subscribers
+    controller: App\Controller\SubscriberController::add
+    methods: [POST]

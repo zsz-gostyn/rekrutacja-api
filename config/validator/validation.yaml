@@ -16,3 +16,28 @@ App\Entity\Post:
             - NotBlank:
                 message: 'Treść nie może być pusta'
 
+App\Entity\Subscriber:
+    properties:
+        first_name:
+            - NotBlank:
+                message: 'Imię nie może być puste'
+            - Length:
+                max: 255
+                maxMessage: 'Imię nie może być dłuższe, niż 255 znaków'
+        surname:
+            - NotBlank:
+                message: 'Nazwisko nie może być puste'
+            - Length:
+                max: 255
+                maxMessage: 'Nazwisko nie może być dłuższe, niż 255 znaków'
+        email:
+            - NotBlank:
+                message: 'Email nie może być pusty'
+            - Email:
+                message: 'Email nie jest poprawny'
+        school:
+            - NotBlank:
+                message: 'Nazwa szkoły nie może być pusta'
+            - Length:
+                max: 255
+                maxMessage: 'Nazwa szkoły nie może być dłuższa, niż 255 znaków'
