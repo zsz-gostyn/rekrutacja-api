@@ -46,3 +46,29 @@ api_subscriber_add:
     path: /subscribers
     controller: App\Controller\SubscriberController::add
     methods: [POST]
+
+
+api_school_show_all:
+    path: /schools
+    controller: App\Controller\SchoolController::showAll
+    methods: [GET]
+
+api_school_show_one:
+    path: /schools/{id}
+    controller: App\Controller\SchoolController::showOne
+    methods: [GET]
+
+api_school_add:
+    path: /schools
+    controller: App\Controller\SchoolController::add
+    methods: [POST]
+
+api_school_update:
+    path: /schools/{id}
+    controller: App\Controller\SchoolController::update
+    methods: [PUT]
+
+api_school_delete:
+    path: /schools/{id}
+    controller: App\Controller\SchoolController::delete
+    methods: [DELETE]

@@ -41,3 +41,12 @@ App\Entity\Subscriber:
             - Length:
                 max: 255
                 maxMessage: Nazwa szkoły nie może być dłuższa, niż 255 znaków
+
+App\Entity\School:
+    properties:
+        name:
+            - NotBlank:
+                message: Nazwa szkoły nie może być pusta
+            - Length:
+                max: 255
+                maxMessage: Nazwa szkoły nie może być dłuższa, niż 255 znaków
