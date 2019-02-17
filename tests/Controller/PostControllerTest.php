@@ -7,12 +7,29 @@ use App\Entity\Post;
 class PostControllerTest extends WebTestCase
 {
     private $entityManager;
+    private $client;
+
+    protected function setUp()
+    {
+        $this->client = $this->createClient(['environment' => 'test']);
+        $this->client->disableReboot();
+        
+        $this->entityManager = $this->client->getContainer()
+            ->get('doctrine')
+            ->getManager();
+
+        $this->entityManager->beginTransaction();
+    }
+    
+    public function tearDown()
+    {
+        $this->entityManager->rollBack();
+    }
 
     public function testShowAll()
     {
-        $client = static::createClient();
-        $client->request('GET', '/posts');
-        $response = $client->getResponse();
+        $this->client->request('GET', '/posts');
+        $response = $this->client->getResponse();
         $this->assertJsonResponse($response);
 
         $data = json_decode($response->getContent(), true);
@@ -25,8 +42,6 @@ class PostControllerTest extends WebTestCase
         $postsResponses = static::addPosts(static::getValidPosts());
         
         foreach ($postsResponses as $response) {
-            $this->entityManager->getConnection()->beginTransaction();
-            
             $this->assertJsonResponse($response, 201);
             $json = json_decode($response->getContent(), true);
             
@@ -41,13 +56,15 @@ class PostControllerTest extends WebTestCase
             $this->assertEquals($post->getOrdinal(), $newPostData['ordinal']);
             $this->assertEquals($post->getTopic(), $newPostData['topic']);
             $this->assertEquals($post->getContent(), $newPostData['content']);
-            $this->assertEquals($post->getCreationDate(), new \DateTime($newPostData['creation_date']));
-            $this->assertEquals($post->getActive(), $newPostData['active']);
-        
-        
-            $this->entityManager->getConnection()->rollBack();
-        }
 
+            $dateFormat = 'Y-m-d\TH:i:s';
+            $this->assertEquals(
+                $post->getCreationDate()->format($dateFormat),
+                (new \DateTime($newPostData['creation_date']))->format($dateFormat)
+            );
+            
+            $this->assertEquals($post->getActive(), $newPostData['active']);
+        }
     }
     
     public function testAddInvalidPosts() {
@@ -65,15 +82,6 @@ class PostControllerTest extends WebTestCase
         $this->assertJson($response->getContent());
     }
     
-    protected function setUp()
-    {
-        $kernel = self::bootKernel();
-
-        $this->entityManager = $kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
-    }
-    
     private function assertArrayHasKeys(array $array, array $keys)
     {
         foreach ($keys as $key) {
@@ -84,13 +92,12 @@ class PostControllerTest extends WebTestCase
     private function addPosts(array $posts): array
     {
         $responses = [];
-        $client = static::createClient();
 
         foreach ($posts as $post) {
             $json = json_encode($post);
 
-            $client->request('POST', '/posts', [], [], ['CONTENT_TYPE' => 'application/json'], $json);
-            $responses[] = $client->getResponse();
+            $this->client->request('POST', '/posts', [], [], ['CONTENT_TYPE' => 'application/json'], $json);
+            $responses[] = $this->client->getResponse();
         }
 
         return $responses;
