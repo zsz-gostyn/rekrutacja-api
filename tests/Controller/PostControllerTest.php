@@ -66,8 +66,9 @@ class PostControllerTest extends WebTestCase
             $this->assertEquals($post->getActive(), $newPostData['active']);
         }
     }
-    
-    public function testAddInvalidPosts() {
+
+    public function testAddInvalidPosts()
+    {
         $postsResponses = static::addPosts(static::getInvalidPosts());
 
         foreach ($postsResponses as $response) {

@@ -2,42 +2,42 @@ App\Entity\Post:
     properties:
         ordinal:
             - NotBlank:
-                message: 'Liczba porządkowa nie może być pusta'
+                message: Liczba porządkowa nie może być pusta
             - GreaterThanOrEqual:
                 value: 1
-                message: 'Liczba porządkowa musi być dodatnią liczbą naturalną'
+                message: Liczba porządkowa musi być dodatnią liczbą naturalną
         topic:
             - NotBlank:
-                message: 'Temat nie może być pusty'
+                message: Temat nie może być pusty
             - Length:
                 max: 255
-                maxMessage: 'Temat nie może być dłuższy, niż 255 znaków'
+                maxMessage: Temat nie może być dłuższy, niż 255 znaków
         content:
             - NotBlank:
-                message: 'Treść nie może być pusta'
+                message: Treść nie może być pusta
 
 App\Entity\Subscriber:
     properties:
         first_name:
             - NotBlank:
-                message: 'Imię nie może być puste'
+                message: Imię nie może być puste
             - Length:
                 max: 255
-                maxMessage: 'Imię nie może być dłuższe, niż 255 znaków'
+                maxMessage: Imię nie może być dłuższe, niż 255 znaków
         surname:
             - NotBlank:
-                message: 'Nazwisko nie może być puste'
+                message: Nazwisko nie może być puste
             - Length:
                 max: 255
-                maxMessage: 'Nazwisko nie może być dłuższe, niż 255 znaków'
+                maxMessage: Nazwisko nie może być dłuższe, niż 255 znaków
         email:
             - NotBlank:
-                message: 'Email nie może być pusty'
+                message: Email nie może być pusty
             - Email:
-                message: 'Email nie jest poprawny'
+                message: Email nie jest poprawny
         school:
             - NotBlank:
-                message: 'Nazwa szkoły nie może być pusta'
+                message: Nazwa szkoły nie może być pusta
             - Length:
                 max: 255
-                maxMessage: 'Nazwa szkoły nie może być dłuższa, niż 255 znaków'
+                maxMessage: Nazwa szkoły nie może być dłuższa, niż 255 znaków
