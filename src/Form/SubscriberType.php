@@ -6,7 +6,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
+use App\Entity\School;
 
 class SubscriberType extends AbstractType
 {
@@ -16,7 +18,11 @@ class SubscriberType extends AbstractType
             ->add('first_name', TextType::class)
             ->add('surname', TextType::class)
             ->add('email', EmailType::class)
-            ->add('school', TextType::class)
+            ->add('school', EntityType::class, [
+                'class' => School::class,
+                'expanded' => false,
+                'multiple' => false,
+            ])
         ;
     }
 

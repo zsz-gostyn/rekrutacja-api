@@ -37,10 +37,7 @@ App\Entity\Subscriber:
                 message: Email nie jest poprawny
         school:
             - NotBlank:
-                message: Nazwa szkoły nie może być pusta
-            - Length:
-                max: 255
-                maxMessage: Nazwa szkoły nie może być dłuższa, niż 255 znaków
+                message: Szkoła musi zostać uzupełnona
 
 App\Entity\School:
     properties:
