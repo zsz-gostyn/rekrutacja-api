@@ -72,3 +72,8 @@ api_school_delete:
     path: /schools/{id}
     controller: App\Controller\SchoolController::delete
     methods: [DELETE]
+
+api_login:
+    path: /login
+    controller: App\Controller\SecurityController::login
+    methods: [POST]

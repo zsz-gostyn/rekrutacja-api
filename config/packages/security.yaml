@@ -16,6 +16,10 @@ security:
             security: false
         main:
             #anonymous: true
+            stateless: true
+            json_login:
+                check_path: api_login
+                failure_handler: json_login.failure_handler
             guard:
                 authenticators:
                     - App\Security\TokenAuthenticator
@@ -33,3 +37,7 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+
+services:
+    json_login.failure_handler:
+        class: App\Security\JsonAuthenticationFailureHandler

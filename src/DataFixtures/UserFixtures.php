@@ -25,7 +25,6 @@ class UserFixtures extends Fixture
         $user->setUsername($username);
         $encodedPassword = $this->passwordEncoder->encodePassword($user, $password);
         $user->setPassword($encodedPassword);
-        $user->setApiToken('token');
 
         $manager->persist($user);
         $manager->flush();
