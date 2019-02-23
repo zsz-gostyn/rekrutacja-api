@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Security\TokenGenerator;
@@ -21,6 +22,10 @@ class SecurityController extends AbstractController
         return $this->json([
             'message' => 'Pomyślnie zalogowano',
             'token' => $user->getApiToken(),
-        ]);
+        ], Response::HTTP_OK);
+    }
+
+    public function logout(EntityManagerInterface $entityManager)
+    {
     }
 }

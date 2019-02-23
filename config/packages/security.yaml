@@ -20,6 +20,10 @@ security:
             json_login:
                 check_path: api_login
                 failure_handler: json_login.failure_handler
+            logout:
+                path: api_logout
+                success_handler: logout.success_handler
+                handlers: [logout.handler]
             guard:
                 authenticators:
                     - App\Security\TokenAuthenticator
@@ -41,3 +45,8 @@ security:
 services:
     json_login.failure_handler:
         class: App\Security\JsonAuthenticationFailureHandler
+    logout.success_handler:
+        class: App\Security\LogoutSuccessHandler
+    logout.handler:
+        autowire: true
+        class: App\Security\LogoutHandler

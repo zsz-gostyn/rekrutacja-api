@@ -10,7 +10,7 @@ class TokenGenerator
     {
         $token = '';
         for ($index = 0; $index < $size; ++$index) {
-            $token .= $charset[mt_rand(0, strlen($charset) - 1)];
+            $token .= $charset[random_int(0, strlen($charset) - 1)];
         }
 
         return $token;

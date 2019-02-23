@@ -116,7 +116,7 @@ class User implements UserInterface
         return $this->api_token;
     }
 
-    public function setApiToken(string $api_token): self
+    public function setApiToken(string $api_token = null): self
     {
         $this->api_token = $api_token;
 
