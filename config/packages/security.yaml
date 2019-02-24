@@ -15,7 +15,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            #anonymous: true
+            anonymous: true
             stateless: true
             json_login:
                 check_path: api_login
@@ -39,8 +39,14 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/posts, roles: ROLE_ADMIN, methods: [POST, PUT, DELETE] }
+        - { path: ^/subscribers, roles: ROLE_ADMIN, methods: [GET] }
+        - { path: ^/schools, roles: ROLE_ADMIN, methods: [POST, PUT, DELETE] }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
 
 services:
     json_login.failure_handler:

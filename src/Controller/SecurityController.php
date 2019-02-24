@@ -14,6 +14,12 @@ class SecurityController extends AbstractController
     {
         $user = $this->getUser();
         
+        if (!$user) {
+            return $this->json([
+                'message' => 'Niepełny format przysłanych danych',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         $token = $tokenGenerator->generateToken();
         $user->setApiToken($token);
         $entityManager->persist($user);
