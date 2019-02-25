@@ -8,6 +8,7 @@ class PostControllerTest extends WebTestCase
 {
     private $entityManager;
     private $client;
+    private $token;
 
     protected function setUp()
     {
@@ -19,11 +20,34 @@ class PostControllerTest extends WebTestCase
             ->getManager();
 
         $this->entityManager->beginTransaction();
+
+        static::login();
     }
     
     public function tearDown()
     {
         $this->entityManager->rollBack();
+    }
+
+    public function login()
+    {
+        $data = [
+            'username' => 'admin',
+            'password' => 'admin',
+        ];
+        $json = json_encode($data);
+
+        $this->client->request('POST', '/login', [], [], ['CONTENT_TYPE' => 'application/json'], $json);
+        $response = $this->client->getResponse();
+        $this->assertJsonResponse($response);
+
+        $responseAsArray = json_decode($response->getContent(), true);
+        $this->token = $responseAsArray['token'];
+    }
+
+    public function logout()
+    {
+        $this->client->request('GET', '/logout');
     }
 
     public function testShowAll()
@@ -97,7 +121,7 @@ class PostControllerTest extends WebTestCase
         foreach ($posts as $post) {
             $json = json_encode($post);
 
-            $this->client->request('POST', '/posts', [], [], ['CONTENT_TYPE' => 'application/json'], $json);
+            $this->client->request('POST', '/posts', [], [], ['CONTENT_TYPE' => 'application/json', 'HTTP_X_AUTH_TOKEN' => $this->token], $json);
             $responses[] = $this->client->getResponse();
         }
 
