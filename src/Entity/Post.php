@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
  */
-class Post
+class Post implements \JsonSerializable
 {
     /**
      * @ORM\Id()
@@ -40,6 +40,11 @@ class Post
      * @ORM\Column(type="boolean")
      */
     private $active;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="posts")
+     */
+    private $user;
 
     public function getId(): ?int
     {
@@ -104,5 +109,29 @@ class Post
         $this->active = $active;
 
         return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'ordinal' => $this->ordinal,
+            'topic' => $this->topic,
+            'content' => $this->content,
+            'active' => $this->active,
+            'user' => $this->user->getId(),
+        ];
     }
 }
