@@ -36,18 +36,19 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", unique=true, nullable=true)
-     */
-    private $api_token;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="user")
      */
     private $posts;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Token", mappedBy="user", orphanRemoval=true)
+     */
+    private $tokens;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+        $this->tokens = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -123,18 +124,6 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getApiToken(): ?string
-    {
-        return $this->api_token;
-    }
-
-    public function setApiToken(string $api_token = null): self
-    {
-        $this->api_token = $api_token;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Post[]
      */
@@ -160,6 +149,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($post->getUser() === $this) {
                 $post->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Token[]
+     */
+    public function getTokens(): Collection
+    {
+        return $this->tokens;
+    }
+
+    public function addToken(Token $token): self
+    {
+        if (!$this->tokens->contains($token)) {
+            $this->tokens[] = $token;
+            $token->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeToken(Token $token): self
+    {
+        if ($this->tokens->contains($token)) {
+            $this->tokens->removeElement($token);
+            // set the owning side to null (unless already changed)
+            if ($token->getUser() === $this) {
+                $token->setUser(null);
             }
         }
 

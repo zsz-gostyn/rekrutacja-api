@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
+use App\Entity\Token;
 
 class TokenAuthenticator extends AbstractGuardAuthenticator
 {
@@ -24,23 +25,37 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function supports(Request $request)
     {
-        return $request->headers->has('X-AUTH-TOKEN');
+        return $request->headers->has(Token::HTTP_HEADER_FIELD_NAME);
     }
 
     public function getCredentials(Request $request)
     {
-        return ['token' => $request->headers->get('X-AUTH-TOKEN')];
+        return ['token' => $request->headers->get(Token::HTTP_HEADER_FIELD_NAME)];
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        $token = $credentials['token'];
+        $tokenValue = $credentials['token'];
+        if (!$tokenValue) {
+            return;
+        }
 
+        $token = $this->entityManager->getRepository(Token::class)->findOneBy(['value' => $tokenValue]);
         if (!$token) {
             return;
         }
 
-        return $this->entityManager->getRepository(User::class)->findOneBy(['api_token' => $token]);
+        if (!$token->isValid()) {
+            $this->entityManager->remove($token);
+            $this->entityManager->flush();
+            return;
+        }
+
+        $token->renew();
+        $this->entityManager->persist($token);
+        $this->entityManager->flush();
+
+        return $token->getUser();
     }
 
     public function checkCredentials($credentials, UserInterface $user)

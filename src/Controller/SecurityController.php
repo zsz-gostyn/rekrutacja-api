@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Security\TokenGenerator;
+use App\Entity\Token;
 
 class SecurityController extends AbstractController
 {
@@ -20,18 +21,24 @@ class SecurityController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $token = $tokenGenerator->generateToken();
-        $user->setApiToken($token);
+        $token = new Token();
+        $token->setValue($tokenGenerator->generateToken());
+        $token->renew();
+        $entityManager->persist($token);
+
+        $user->addToken($token);
         $entityManager->persist($user);
+
         $entityManager->flush();
 
         return $this->json([
             'message' => 'Pomyślnie zalogowano',
-            'token' => $user->getApiToken(),
+            'token' => $token->getValue(),
         ], Response::HTTP_OK);
     }
 
     public function logout(EntityManagerInterface $entityManager)
     {
+        // Logout handler is located in src/Security/LogoutHandler.php
     }
 }
