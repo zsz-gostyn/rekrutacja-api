@@ -12,12 +12,16 @@ class SchoolController extends AbstractController
 {
     public function showAll(Request $request)
     {
+        $isAdmin = $this->isGranted('ROLE_ADMIN');
+
         $limit = $request->get('limit', 2);
         $offset = $request->get('offset', 0);
         
         $repository = $this->getDoctrine()->getManager()->getRepository(School::class);
-        $schools = $repository->findBy([], [], $limit, $offset);
-        $totalSchoolsAmount = $repository->countBy([]);
+
+        $criteria = $isAdmin ? [] : ['accepted' => true];
+        $schools = $repository->findBy($criteria, [], $limit, $offset);
+        $totalSchoolsAmount = $repository->countBy($criteria);
 
         return $this->json([
             'data' => $schools,
@@ -40,12 +44,16 @@ class SchoolController extends AbstractController
 
     public function add(Request $request)
     {
+        $isAdmin = $this->isGranted('ROLE_ADMIN');
+
         $school = new School();
 
         $form = $this->createForm(SchoolType::class, $school);
         $form->submit(json_decode($request->getContent(), true));
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $school->setAccepted($isAdmin);
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($school);
             $entityManager->flush();

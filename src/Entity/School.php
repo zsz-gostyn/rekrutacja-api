@@ -28,6 +28,11 @@ class School implements \JsonSerializable
      */
     private $subscribers;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $accepted;
+
     public function __construct()
     {
         $this->subscribers = new ArrayCollection();
@@ -87,5 +92,17 @@ class School implements \JsonSerializable
             'id' => $this->id,
             'name' => $this->name
         ];
+    }
+
+    public function getAccepted(): ?bool
+    {
+        return $this->accepted;
+    }
+
+    public function setAccepted(bool $accepted): self
+    {
+        $this->accepted = $accepted;
+
+        return $this;
     }
 }
