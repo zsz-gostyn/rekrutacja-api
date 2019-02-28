@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "332c9bb58ad4cc6cfea74144adf84fbf",
+    "content-hash": "f8c95133f4db8a02fae3b1ab01638754",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1189,6 +1189,46 @@
                 "reflection"
             ],
             "time": "2018-06-14T14:45:07+00:00"
+        },
+        {
+            "name": "fsevestre/boolean-form-type",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fsevestre/BooleanFormType.git",
+                "reference": "aabb0a745aa208c228b61cbc49f249116561bfad"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fsevestre/BooleanFormType/zipball/aabb0a745aa208c228b61cbc49f249116561bfad",
+                "reference": "aabb0a745aa208c228b61cbc49f249116561bfad",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9",
+                "symfony/form": "~2.8|~3.0|~4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FSevestre\\BooleanFormType\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Florent SEVESTRE"
+                }
+            ],
+            "description": "Boolean form type for Symfony REST APIs",
+            "homepage": "https://github.com/fsevestre/BooleanFormType",
+            "time": "2017-10-04T18:25:58+00:00"
         },
         {
             "name": "jdorn/sql-formatter",

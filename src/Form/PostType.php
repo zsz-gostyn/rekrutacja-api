@@ -6,8 +6,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-
+use FSevestre\BooleanFormType\Form\Type\BooleanType;
 
 class PostType extends AbstractType
 {
@@ -17,7 +16,7 @@ class PostType extends AbstractType
             ->add('ordinal', IntegerType::class)
             ->add('topic', TextType::class)
             ->add('content', TextType::class)
-            ->add('active', CheckboxType::class)
+            ->add('active', BooleanType::class)
         ;
     }
 

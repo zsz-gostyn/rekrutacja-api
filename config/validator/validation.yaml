@@ -15,6 +15,10 @@ App\Entity\Post:
         content:
             - NotBlank:
                 message: Treść nie może być pusta
+        active:
+            - Type:
+                type: bool
+                message: Pole active musi być wartością logiczną
 
 App\Entity\Subscriber:
     properties:
@@ -47,3 +51,7 @@ App\Entity\School:
             - Length:
                 max: 255
                 maxMessage: Nazwa szkoły nie może być dłuższa, niż 255 znaków
+        accepted:
+            - Type:
+                type: bool
+                message: Pole accepted musi być wartością logiczną

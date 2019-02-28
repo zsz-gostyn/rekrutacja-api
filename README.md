@@ -73,32 +73,51 @@ Na wyżej wymienionych zasobach wykonuje się akcje. Można przykładowo: dodać
 
 - posts
 
-  | Metoda HTTP | Ścieżka     | Opis                                                         | Wymagane uprawnienia                         |
-  | ----------- | ----------- | ------------------------------------------------------------ | -------------------------------------------- |
-  | GET         | /posts      | Pobiera listę wszystkich postów. Domyślnie wypisywane są dwa. Aby to zmienić, należy zapoznać się z sekcją *Stronnicowanie*. Liczba wszystkich istniejących postów znajduje się w polu **count** odpowiedzi. Natomiast dane prezentujące poszczególne posty znajdują się w polu **data** odpowiedzi. Administratorom zwracana jest lista wszystkich postów (zarówno tych aktywnych, jak i nieaktywnych), natomiast użytkownicy anonimowi otrzymują dostęp wyłącznie do postów aktywnych. | Każdy może wykonać tę operację               |
-  | GET         | /posts/{id} | Pobiera informacje na temat konkretnego posta (w miejsce {id} należy wstawić liczbowy identyfikator posta). | Każdy może wykonać tę operację               |
-  | POST        | /posts      | Dodaje nowy post. Wymagane do wysłania pola opisane zostały wcześniej, w sekcji *Zasoby*. | Tylko administrator może wykonać tę operację |
-  | PUT         | /posts/{id} | Aktualizuje post o konkretnym id (w miejsce {id} należy wstawić liczbowy identyfikator posta). Wymagane jest wysłanie wszystkich obowiązkowych pól (zostały opisane wcześniej, w sekcji *Zasoby*). | Tylko administrator może wykonać tę operację |
-  | DELETE      | /posts/{id} | Usuwa post o konkretnym id (w miejsce {id} należy wstawić liczbowy identyfikator posta). Nie trzeba wysyłać żadnych pól. | Tylko administrator może wykonać tę operację |
+  | Metoda HTTP | Ścieżka     | Opis                                                         | Wymagane uprawnienia                         | Zwracany status HTTP                                         |
+  | ----------- | ----------- | ------------------------------------------------------------ | -------------------------------------------- | ------------------------------------------------------------ |
+  | GET         | /posts      | Pobiera listę wszystkich postów. Domyślnie wypisywane są dwa. Aby to zmienić, należy zapoznać się z sekcją *Stronnicowanie*. Liczba wszystkich istniejących postów znajduje się w polu **count** odpowiedzi. Natomiast dane prezentujące poszczególne posty znajdują się w polu **data** odpowiedzi. Administratorom zwracana jest lista wszystkich postów (zarówno tych aktywnych, jak i nieaktywnych), natomiast użytkownicy anonimowi otrzymują dostęp wyłącznie do postów aktywnych. | Każdy może wykonać tę operację               | **200 (OK)** w razie powodzenia                              |
+  | GET         | /posts/{id} | Pobiera informacje na temat konkretnego posta (w miejsce {id} należy wstawić liczbowy identyfikator posta). | Każdy może wykonać tę operację               | **200 (OK)** w razie powodzenia; **404 (Not Found)** w przypadku, gdy zasób o danym id nie istnieje |
+  | POST        | /posts      | Dodaje nowy post. Wymagane do wysłania pola opisane zostały wcześniej, w sekcji *Zasoby*. | Tylko administrator może wykonać tę operację | **201 (Created)** w razie powodzenia; **400 (Bad Request)** w razie błędu walidacji |
+  | PUT         | /posts/{id} | Aktualizuje post o konkretnym id (w miejsce {id} należy wstawić liczbowy identyfikator posta). Wymagane jest wysłanie wszystkich obowiązkowych pól (zostały opisane wcześniej, w sekcji *Zasoby*). | Tylko administrator może wykonać tę operację | **200 (OK)** w razie powodzenia; **404 (Not Found)** w przypadku, gdy post o danym id nie istnieje; **400 (Bad Request)** w razie błędu walidacji |
+  | DELETE      | /posts/{id} | Usuwa post o konkretnym id (w miejsce {id} należy wstawić liczbowy identyfikator posta). Nie trzeba wysyłać żadnych pól. | Tylko administrator może wykonać tę operację | **200 (OK)** w razie powodzenia; **404 (Not Found)** w przypadku, gdy post o podanym id nie istnieje |
 
 - schools
 
-  | Metoda HTTP | Ścieżka                | Opis                                                         | Wymagane uprawnienia                          |
-  | ----------- | ---------------------- | ------------------------------------------------------------ | --------------------------------------------- |
-  | GET         | /schools               | Pobiera informacje na temat wszystkich szkół. Domyślnie wypisywane są dwie. Aby to zmienić, należy zapoznać się z sekcją *Stronnicowanie*. Liczba wszystkich istniejących szkół znajduje się w polu **count** odpowiedzi. Natomiast dane prezentujące poszczególne szkoły znajdują się w polu **data** odpowiedzi. Administratorom zwracana jest pełna lista szkół, natomiast użytkownikom anonimowych tylko lista szkół zatwierdzonych (zaakceptowanych). | Każdy może wykonać tę operację                |
-  | GET         | /schools/{id}          | Pobiera informacje na temat konkretnej szkoły (w miejsce {id} należy wstawić liczbowy identyfikator szkoły). | Każdy może wykonać tę operację                |
-  | POST        | /schools               | Dodaje nową szkołę. Wymagane jest wysłanie wszystkich obowiązkowych pól (zostały one opisane w sekcji *Zasoby*). Szkoła dodawana przez administratora jest domyślnie zaakceptowana, natomiast taka dodawana przez użytkownika nie jest domyślnie zaakceptowana - oczekuje na zatwierdzenie przez administratora. | Każdy może wykonać tę operację                |
-  | PUT         | /schools/{id}          | Aktualizuje konkretną szkołę (w miejsce {id} należy wstawić liczbowy identyfikator szkoły). | Tylko administrator może wykonać tę operację  |
-  | DELETE      | /schools/{id}          | Usuwa konkretną szkołę (w miejsce {id} należy wstawić liczbowy identyfikator szkoły). | Tylko administrator może wykonać tę operację. |
-  | PUT         | /schools/{id}/accepted | Zmienia status "zaakceptowany" szkoły na przesłany w zapytaniu. Opis pól przesyłanych w tej właściwości jest dostępny w sekcji *Zasoby*. | Tylko administrator może wykonać tę operację  |
+  | Metoda HTTP | Ścieżka                | Opis                                                         | Wymagane uprawnienia                          | Zwracany status HTTP                                         |
+  | ----------- | ---------------------- | ------------------------------------------------------------ | --------------------------------------------- | ------------------------------------------------------------ |
+  | GET         | /schools               | Pobiera informacje na temat wszystkich szkół. Domyślnie wypisywane są dwie. Aby to zmienić, należy zapoznać się z sekcją *Stronnicowanie*. Liczba wszystkich istniejących szkół znajduje się w polu **count** odpowiedzi. Natomiast dane prezentujące poszczególne szkoły znajdują się w polu **data** odpowiedzi. Administratorom zwracana jest pełna lista szkół, natomiast użytkownikom anonimowych tylko lista szkół zatwierdzonych (zaakceptowanych). | Każdy może wykonać tę operację                | **200 (OK)** w razie powodzenia                              |
+  | GET         | /schools/{id}          | Pobiera informacje na temat konkretnej szkoły (w miejsce {id} należy wstawić liczbowy identyfikator szkoły). | Każdy może wykonać tę operację                | **200 (OK)** w razie powodzenia; **404 (Not Found)** w razie, gdy szkoła o podanym id nie istnieje |
+  | POST        | /schools               | Dodaje nową szkołę. Wymagane jest wysłanie wszystkich obowiązkowych pól (zostały one opisane w sekcji *Zasoby*). Szkoła dodawana przez administratora jest domyślnie zaakceptowana, natomiast taka dodawana przez użytkownika nie jest domyślnie zaakceptowana - oczekuje na zatwierdzenie przez administratora. | Każdy może wykonać tę operację                | **201  (Created)** w razie powodzenia; **400 (Bad Request)** w razie błędu walidacji |
+  | PUT         | /schools/{id}          | Aktualizuje konkretną szkołę (w miejsce {id} należy wstawić liczbowy identyfikator szkoły). | Tylko administrator może wykonać tę operację  | **200 (OK)** w razie powodzenia; **400 (Bad Request)** w razie błędu walidacji; **404 (Not Found)** w przypadku, gdy szkoła o danym id nie istnieje |
+  | DELETE      | /schools/{id}          | Usuwa konkretną szkołę (w miejsce {id} należy wstawić liczbowy identyfikator szkoły). | Tylko administrator może wykonać tę operację. | **200 (OK)** w razie powodzenia; **404 (Not Found)** w przypadku, gdy szkoła o danym id nie istnieje |
+  | PUT         | /schools/{id}/accepted | Zmienia status "zaakceptowany" szkoły na przesłany w zapytaniu. Opis pól przesyłanych w tej właściwości jest dostępny w sekcji *Zasoby*.gT | Tylko administrator może wykonać tę operację  | **200 (OK)** w razie powodzenia; **400 (Bad Request)** w razie błędu walidacji; **404 (Not Found)** w przypadku, gdy szkoła o danym id nie istnieje |
 
 - subscribers
 
-  | Metoda HTTP | Ścieżka           | Opis                                                         | Wymagane uprawnienia                         |
-  | ----------- | ----------------- | ------------------------------------------------------------ | -------------------------------------------- |
-  | GET         | /subscribers      | Pobiera informacje na temat wszystkich subskrybentów. Domyślnie wypisywane są dwaj subskrybenci. Aby to zmienić, należy zapoznać się z sekcją *Stronnicowanie*. Liczba wszystkich istniejących postów znajduje się w polu **count** odpowiedzi. Natomiast dane prezentujące poszczególnych subskrybentów znajdują się w polu **data** odpowiedzi. | Tylko administrator może wykonać tę operację |
-  | GET         | /subscribers/{id} | Pobiera informacje na temat konkretnego subskrybenta (w miejsce {id} należy wstawić liczbowy identyfikator szkoły). | Tylko administrator może wykonać tę operację |
-  | POST        | /subscribers      | Dodaje nowego subskrybenta. Lista wymaganych pól znajduje się w sekcji *Zasoby*. | Każdy może wykonać tę operację               |
+  | Metoda HTTP | Ścieżka           | Opis                                                         | Wymagane uprawnienia                         | Zwracany status HTTP                                         |
+  | ----------- | ----------------- | ------------------------------------------------------------ | -------------------------------------------- | ------------------------------------------------------------ |
+  | GET         | /subscribers      | Pobiera informacje na temat wszystkich subskrybentów. Domyślnie wypisywane są dwaj subskrybenci. Aby to zmienić, należy zapoznać się z sekcją *Stronnicowanie*. Liczba wszystkich istniejących postów znajduje się w polu **count** odpowiedzi. Natomiast dane prezentujące poszczególnych subskrybentów znajdują się w polu **data** odpowiedzi. | Tylko administrator może wykonać tę operację | **200 (OK)** w razie powodzenia                              |
+  | GET         | /subscribers/{id} | Pobiera informacje na temat konkretnego subskrybenta (w miejsce {id} należy wstawić liczbowy identyfikator szkoły). | Tylko administrator może wykonać tę operację | **200 (OK)** w razie powodzenia; **404 (Not Found)** w przypadku, gdy subskrybent o podanym id nie istnieje |
+  | POST        | /subscribers      | Dodaje nowego subskrybenta. Lista wymaganych pól znajduje się w sekcji *Zasoby*. | Każdy może wykonać tę operację               | **201 (Created)** w razie powodzenia; **400 (Bad Request)** w przypadku, gdy subskrybent o podanym id nie istnieje |
+
+### Statusy HTTP odpowiedzi
+
+Na każde zapytanie klienta serwer udziela odpowiedzi. Odpowiedzi te mają taką cechę, jak status - mówi on, czy żądanie klienta zostało spełnione, czy może wystąpiły jakieś problemy. Niniejsze API posługuje się następującymi rodzajami statusów:
+
+- **200 (OK)** - powodzenie wykonania operacji pobierania, aktualizacji lub usuwania danych oraz wylogowania użytkownika
+- **201 (Created)** - powodzenie wykonania operacji dodania danych
+- **400 (Bad Request)** - niepowodzenie wykonania operacji na wskutek błędnie utworzonego zapytania (na przykład błędu walidacji danych wysyłanych do API)
+- **401 (Unauthorized)** - niepowodzenie wykonania operacji na wskutek podania niewłaściwego tokenu uwierzytelniającego lub braku podania tego tokenu w zapytaniach tego wymagających (przykładowo, aby uzyskać dostęp do listy subskrybentów, użytkownik anonimowy powinien się zalogować)
+- **404 (Not Found)** - niepowodzenie wykonania operacji ze względu na to, że zasób nie istnieje
+
+### Dodatkowe informacje w odpowiedzi
+
+W odpowiedzi serwera, przy akcjach, które tego wymagają, zwrócone mogą zostać także dodatkowe informacje. Oto pola, które mogą się tam znaleźć:
+
+| Nazwa pola | Opis                                            | Typ danych                   |
+| ---------- | ----------------------------------------------- | ---------------------------- |
+| message    | Wiadomość opisująca stan wykonania się operacji | Tekst                        |
+| errors     | Lista błędów (na przykład walidacji)            | Tablica elementów tekstowych |
 
 ### Stronnicowanie
 

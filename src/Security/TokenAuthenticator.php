@@ -67,7 +67,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     {
         return new JsonResponse([
             'message' => 'Błąd uwierzytelnienia'
-        ], Response::HTTP_FORBIDDEN);
+        ], Response::HTTP_UNAUTHORIZED);
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)

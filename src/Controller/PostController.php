@@ -27,7 +27,7 @@ class PostController extends AbstractController
         return $this->json([
             'data' => $posts,
             'count' => $totalPostsAmount,
-        ]);
+        ], Response::HTTP_OK);
     }
 
     public function showOne($id)
@@ -35,12 +35,14 @@ class PostController extends AbstractController
         $post = $this->getDoctrine()->getRepository(Post::class)->find($id);
         
         if (!$post) {
-            return $this->json(['message' => 'Post o podanym id nie istnieje'], Response::HTTP_NOT_FOUND);
+            return $this->json([
+                'message' => 'Post o podanym id nie istnieje',
+            ], Response::HTTP_NOT_FOUND);
         }
 
         return $this->json([
-            'data' => $post
-        ]);
+            'data' => $post,
+        ], Response::HTTP_OK);
     }
 
     public function add(Request $request)
@@ -63,7 +65,7 @@ class PostController extends AbstractController
             ], Response::HTTP_CREATED);
         } else {
             return $this->json([
-                'message' => 'Blad walidacji'
+                'message' => 'Błąd walidacji'
             ], Response::HTTP_BAD_REQUEST);
         }
     }
@@ -87,12 +89,12 @@ class PostController extends AbstractController
 
             return $this->json([
                 'data' => $post,
-                'message' => 'Pomyslnie zaktualizowano'
-            ]);
+                'message' => 'Pomyślnie zaktualizowano',
+            ], Response::HTTP_OK);
         }
 
         return $this->json([
-            'message' => 'Blad walidacji'
+            'message' => 'Błąd walidacji',
         ], Response::HTTP_BAD_REQUEST);
     }
 
@@ -103,15 +105,15 @@ class PostController extends AbstractController
 
         if (!$post) {
             return $this->json([
-                'message' => 'Post o podanym id nie istnieje'
-            ]);
+                'message' => 'Post o podanym id nie istnieje',
+            ], Result::HTTP_NOT_FOUND);
         }
 
         $entityManager->remove($post);
         $entityManager->flush();
 
         return $this->json([
-            'message' => 'Post usuniety'
-        ]);
+            'message' => 'Post usunięty',
+        ], Result::HTTP_OK);
     }
 };

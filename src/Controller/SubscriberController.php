@@ -21,7 +21,7 @@ class SubscriberController extends AbstractController
         return $this->json([
             'data' => $subscribers,
             'count' => $totalSubscribersAmount,
-        ]);
+        ], Response::HTTP_OK);
     }
 
     public function showOne($id)
@@ -29,10 +29,14 @@ class SubscriberController extends AbstractController
         $subscriber = $this->getDoctrine()->getRepository(Subscriber::class)->find($id);
 
         if (!$subscriber) {
-            return $this->json(['message' => 'Subskrybent o podanym id nie istnieje'], Response::HTTP_NOT_FOUND);
+            return $this->json([
+                'message' => 'Subskrybent o podanym id nie istnieje'
+            ], Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json(['data' => $subscriber]);
+        return $this->json([
+            'data' => $subscriber
+        ], Response::HTTP_OK);
     }
 
     public function add(Request $request)

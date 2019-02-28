@@ -11,6 +11,7 @@
 # Vim
 *.swp
 *.swa
+*.swo
 
 ###> symfony/phpunit-bridge ###
 .phpunit

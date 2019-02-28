@@ -27,7 +27,7 @@ class SchoolController extends AbstractController
         return $this->json([
             'data' => $schools,
             'count' => $totalSchoolsAmount,
-        ]);
+        ], Response::HTTP_OK);
     }
 
     public function showOne($id)
@@ -40,7 +40,9 @@ class SchoolController extends AbstractController
             ], Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json(['data' => $school]);
+        return $this->json([
+            'data' => $school,
+        ], Response::HTTP_OK);
     }
 
     public function add(Request $request)
@@ -60,12 +62,12 @@ class SchoolController extends AbstractController
             $entityManager->flush();
 
             return $this->json([
-                'data' => $school
+                'data' => $school,
             ], Response::HTTP_CREATED);
         }
 
         return $this->json([
-            'message' => 'Błąd walidacji'
+            'message' => 'Błąd walidacji',
         ], Response::HTTP_BAD_REQUEST);
     }
 
@@ -77,7 +79,7 @@ class SchoolController extends AbstractController
         $school = $repository->find($id);
         if (!$school) {
             return $this->json([
-                'message' => 'Szkoła o podanym id nie istnieje'
+                'message' => 'Szkoła o podanym id nie istnieje',
             ], Response::HTTP_NOT_FOUND);
         }
         
@@ -91,11 +93,11 @@ class SchoolController extends AbstractController
             return $this->json([
                 'data' => $school,
                 'message' => 'Pomyślnie zaktualizowano',
-            ], Response::HTTP_CREATED);
+            ], Response::HTTP_OK);
         }
 
         return $this->json([
-            'message' => 'Błąd formularza'
+            'message' => 'Błąd walidacji',
         ], Response::HTTP_BAD_REQUEST);
     }
 
@@ -116,7 +118,7 @@ class SchoolController extends AbstractController
 
         return $this->json([
             'message' => 'Szkoła usunięta',
-        ]);
+        ], Response::HTTP_OK);
     }
 
     public function setAccepted(Request $request, $id)
@@ -131,17 +133,8 @@ class SchoolController extends AbstractController
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $json = json_decode($request->getContent(), true);
-        if (null === $json) {
-            return $this->json([
-                'message' => 'Niepoprawny format pliku JSON',
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
-        $accepted = isset($json['accepted']) ? $json['accepted'] : false;
-
         $form = $this->createForm(AcceptedType::class, $school);
-        $form->submit(['accepted' => $accepted]);
+        $form->submit(json_decode($request->getContent(), true));
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($school);
@@ -151,5 +144,10 @@ class SchoolController extends AbstractController
                 'data' => $school,
             ], Response::HTTP_OK);
         }
+
+        return $this->json([
+            'message' => 'Błąd walidacji',
+            'error' => $form->getErrors(true),
+        ], Response::HTTP_BAD_REQUEST);
     }
 }
