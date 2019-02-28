@@ -40,13 +40,21 @@ W skład aplikacji wchodzą następujące zasoby:
   | ordinal    | Numer porządkowy; określa pozycję na liście wszystkich postów (im mniejszy numer, tym wcześniejsza pozycja) | Liczba całkowita               | Tak                                                          |
   | topic      | Temat; krótki tytuł wiadomości                               | Tekst (maksymalnie 255 znaków) | Tak                                                          |
   | content    | Treść wiadomości                                             | Tekst                          | Tak                                                          |
-  | active     | Określa, czy post jest aktywny; jeżeli nie jest aktywny, nie będzie prezentowany użytkownikom | Wartość logiczna               | Nie (w przypadku niepodania wartość fałszywa, w przeciwnym wypadku - prawdziwa) |
+  | active     | Określa, czy post jest aktywny; jeżeli nie jest aktywny, nie będzie prezentowany użytkownikom | Wartość logiczna               | Nie (w przypadku niepodania - wartość fałszywa, w przeciwnym wypadku - prawdziwa) |
 
 - schools - zasób ten gromadzi informacje na temat szkoły, w której aktualnie uczy się subskrybent. Szkołę opisują następujące pola:
 
   | Nazwa pola | Opis pola    | Typ                            | Wymagane |
   | ---------- | ------------ | ------------------------------ | -------- |
   | name       | Nazwa szkoły | Tekst (maksymalnie 255 znaków) | Tak      |
+
+  Szkoła dysponuje także właściwością accepted, która określa, czy szkoła została zaakceptowana i dostępna do wglądu dla wszystkich użytkowników (kiedy uczeń doda szkołę, administrator musi ją najpierw zweryfikować, nim zostanie ona udostępniona do wyboru szerszej grupie użytkowników). Opisuje ją tylko jedno pole:
+
+  | Nazwa pola | Opis pola                                                    | Typ              | Wymagane                                                     |
+  | ---------- | ------------------------------------------------------------ | ---------------- | ------------------------------------------------------------ |
+  | accepted   | Określa, czy szkoła została zaakceptowana przez administratora i umieszczona na ogólnodostępnej liście. | Wartość logiczna | Nie (w przypadku niepodania - wartość fałszywa, w przeciwnym wypadku - prawdziwa) |
+
+  Właściwość ta (*accepted*) została odłączona od zwykłych właściwości (*name*) ze względu na to, że tylko administrator ma prawo ustawić ją według własnych potrzeb.
 
 - subscribers - zasób ten przechowuje informacje na temat danego subskrybenta. Subskrybentem jest użytkownik, który wyraził chęć informowania go o przebiegu rekrutacji i zgodził się podać swoje dane.
 
@@ -75,13 +83,14 @@ Na wyżej wymienionych zasobach wykonuje się akcje. Można przykładowo: dodać
 
 - schools
 
-  | Metoda HTTP | Ścieżka       | Opis                                                         | Wymagane uprawnienia                         |
-  | ----------- | ------------- | ------------------------------------------------------------ | -------------------------------------------- |
-  | GET         | /schools      | Pobiera informacje na temat wszystkich szkół. Domyślnie wypisywane są dwie. Aby to zmienić, należy zapoznać się z sekcją *Stronnicowanie*. Liczba wszystkich istniejących szkół znajduje się w polu **count** odpowiedzi. Natomiast dane prezentujące poszczególne szkoły znajdują się w polu **data** odpowiedzi. Administratorom zwracana jest pełna lista szkół, natomiast użytkownikom anonimowych tylko lista szkół zatwierdzonych (zaakceptowanych). | Każdy może wykonać tę operację               |
-  | GET         | /schools/{id} | Pobiera informacje na temat konkretnej szkoły (w miejsce {id} należy wstawić liczbowy identyfikator szkoły). | Każdy może wykonać tę operację               |
-  | POST        | /schools      | Dodaje nową szkołę. Wymagane jest wysłanie wszystkich obowiązkowych pól (zostały one opisane w sekcji *Zasoby*). Szkoła dodawana przez administratora jest domyślnie zaakceptowana, natomiast taka dodawana przez użytkownika nie jest domyślnie zaakceptowana - oczekuje na zatwierdzenie przez administratora. | Każdy może wykonać tę operację               |
-  | PUT         | /schools/{id} | Aktualizuje konkretną szkołę (w miejsce {id} należy wstawić liczbowy identyfikator szkoły). | Tylko administrator może wykonać tę operację |
-  | DELETE      | /schools/{id} | Usuwa konkretną szkołę (w miejsce {id} należy wstawić liczbowy identyfikator szkoły). | Tylko administrator może wyknać tę operację. |
+  | Metoda HTTP | Ścieżka                | Opis                                                         | Wymagane uprawnienia                          |
+  | ----------- | ---------------------- | ------------------------------------------------------------ | --------------------------------------------- |
+  | GET         | /schools               | Pobiera informacje na temat wszystkich szkół. Domyślnie wypisywane są dwie. Aby to zmienić, należy zapoznać się z sekcją *Stronnicowanie*. Liczba wszystkich istniejących szkół znajduje się w polu **count** odpowiedzi. Natomiast dane prezentujące poszczególne szkoły znajdują się w polu **data** odpowiedzi. Administratorom zwracana jest pełna lista szkół, natomiast użytkownikom anonimowych tylko lista szkół zatwierdzonych (zaakceptowanych). | Każdy może wykonać tę operację                |
+  | GET         | /schools/{id}          | Pobiera informacje na temat konkretnej szkoły (w miejsce {id} należy wstawić liczbowy identyfikator szkoły). | Każdy może wykonać tę operację                |
+  | POST        | /schools               | Dodaje nową szkołę. Wymagane jest wysłanie wszystkich obowiązkowych pól (zostały one opisane w sekcji *Zasoby*). Szkoła dodawana przez administratora jest domyślnie zaakceptowana, natomiast taka dodawana przez użytkownika nie jest domyślnie zaakceptowana - oczekuje na zatwierdzenie przez administratora. | Każdy może wykonać tę operację                |
+  | PUT         | /schools/{id}          | Aktualizuje konkretną szkołę (w miejsce {id} należy wstawić liczbowy identyfikator szkoły). | Tylko administrator może wykonać tę operację  |
+  | DELETE      | /schools/{id}          | Usuwa konkretną szkołę (w miejsce {id} należy wstawić liczbowy identyfikator szkoły). | Tylko administrator może wykonać tę operację. |
+  | PUT         | /schools/{id}/accepted | Zmienia status "zaakceptowany" szkoły na przesłany w zapytaniu. Opis pól przesyłanych w tej właściwości jest dostępny w sekcji *Zasoby*. | Tylko administrator może wykonać tę operację  |
 
 - subscribers
 

@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 use App\Entity\School;
 use App\Form\SchoolType;
+use App\Form\AcceptedType;
 
 class SchoolController extends AbstractController
 {
@@ -116,5 +117,39 @@ class SchoolController extends AbstractController
         return $this->json([
             'message' => 'Szkoła usunięta',
         ]);
+    }
+
+    public function setAccepted(Request $request, $id)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $repository = $entityManager->getRepository(School::class);
+
+        $school = $repository->find($id);
+        if (!$school) {
+            return $this->json([
+                'message' => 'Szkoła o podanym id nie istnieje',
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $json = json_decode($request->getContent(), true);
+        if (null === $json) {
+            return $this->json([
+                'message' => 'Niepoprawny format pliku JSON',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $accepted = isset($json['accepted']) ? $json['accepted'] : false;
+
+        $form = $this->createForm(AcceptedType::class, $school);
+        $form->submit(['accepted' => $accepted]);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($school);
+            $entityManager->flush();
+
+            return $this->json([
+                'data' => $school,
+            ], Response::HTTP_OK);
+        }
     }
 }

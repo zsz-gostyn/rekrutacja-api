@@ -90,7 +90,8 @@ class School implements \JsonSerializable
     {
         return [
             'id' => $this->id,
-            'name' => $this->name
+            'name' => $this->name,
+            'accepted' => $this->accepted,
         ];
     }
 

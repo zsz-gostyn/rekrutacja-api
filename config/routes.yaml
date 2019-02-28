@@ -73,6 +73,11 @@ api_school_delete:
     controller: App\Controller\SchoolController::delete
     methods: [DELETE]
 
+api_school_accepted:
+    path: /schools/{id}/accepted
+    controller: App\Controller\SchoolController::setAccepted
+    methods: [PUT]
+
 
 api_login:
     path: /login
