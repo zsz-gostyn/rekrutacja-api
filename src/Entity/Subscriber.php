@@ -42,6 +42,11 @@ class Subscriber implements \JsonSerializable
      */
     private $school;
 
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $unsubscribe_token;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -116,6 +121,19 @@ class Subscriber implements \JsonSerializable
             'email' => $this->email,
             'creation_date' => $this->creation_date,
             'school' => $this->school->getId(),
+            'unsubscribe_token' => $this->unsubscribe_token,
         ];
+    }
+
+    public function getUnsubscribeToken(): ?string
+    {
+        return $this->unsubscribe_token;
+    }
+
+    public function setUnsubscribeToken(string $unsubscribe_token): self
+    {
+        $this->unsubscribe_token = $unsubscribe_token;
+
+        return $this;
     }
 }

@@ -42,6 +42,7 @@ security:
     access_control:
         - { path: ^/posts, roles: ROLE_ADMIN, methods: [POST, PUT, DELETE] }
         - { path: ^/subscribers, roles: ROLE_ADMIN, methods: [GET] }
+        - { path: ^/subscribers/\d+, roles: ROLE_ADMIN, methods: [DELETE] }
         - { path: ^/schools, roles: ROLE_ADMIN, methods: [PUT, DELETE] }
         - { path: ^/logout, roles: ROLE_USER, methods: [GET] }
         # - { path: ^/admin, roles: ROLE_ADMIN }

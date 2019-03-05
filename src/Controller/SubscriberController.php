@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Subscriber;
 use App\Form\SubscriberType;
+use App\Security\TokenGenerator;
 
 class SubscriberController extends AbstractController 
 {
@@ -43,6 +44,9 @@ class SubscriberController extends AbstractController
     {
         $subscriber = new Subscriber();
         $subscriber->setCreationDate(new \DateTime());
+        
+        $tokenGenerator = new TokenGenerator();
+        $subscriber->setUnsubscribeToken($tokenGenerator->generateToken(32));
 
         $form = $this->createForm(SubscriberType::class, $subscriber);
         $form->submit(json_decode($request->getContent(), true));
@@ -53,6 +57,8 @@ class SubscriberController extends AbstractController
             $entityManager->persist($subscriber);
             $entityManager->flush();
 
+            //TODO: Send Email
+
             return $this->json([
                 'data' => $subscriber
             ], Response::HTTP_CREATED); 
@@ -61,5 +67,43 @@ class SubscriberController extends AbstractController
         return $this->json([
             'message' => 'Błąd walidacji' 
         ], Response::HTTP_BAD_REQUEST);
+    }
+
+    public function deleteUponId(Request $request, $id)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $entityManager->getRepository(Subscriber::class)->find($id);
+
+        if (!$user) {
+            return $this->json([
+                'message' => 'Subskrybent o podanym id nie istnieje'
+            ], Response::HTTP_NOT_FOUND);
+        }
+        
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        return $this->json([
+            'message' => 'Subskrybent usunięty',
+        ], Response::HTTP_OK);
+    }
+
+    public function deleteUponToken(Request $request, $token)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $entityManager->getRepository(Subscriber::class)->findOneBy(['unsubscribe_token' => $token]);
+
+        if (!$user) {
+            return $this->json([
+                'message' => 'Subskrybent o podanym tokenie nie istnieje',
+            ], Response::HTTP_NOT_FOUND);
+        }
+        
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        return $this->json([
+            'message' => 'Subskrybent usunięty',
+        ], Response::HTTP_OK);
     }
 }

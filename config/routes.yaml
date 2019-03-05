@@ -47,6 +47,20 @@ api_subscriber_add:
     controller: App\Controller\SubscriberController::add
     methods: [POST]
 
+api_subscriber_delete_upon_id:
+    path: /subscribers/{id}
+    controller: App\Controller\SubscriberController::deleteUponId
+    methods: [DELETE]
+    requirements:
+        id: '\d+'
+
+api_subscriber_delete_upon_token:
+    path: /subscribers/{token}
+    controller: App\Controller\SubscriberController::deleteUponToken
+    methods: [DELETE]
+    requirements:
+        token: '^[A-Za-z0-9]{32}$'
+
 
 api_school_show_all:
     path: /schools
