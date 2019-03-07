@@ -47,6 +47,16 @@ class Subscriber implements \JsonSerializable
      */
     private $unsubscribe_token;
 
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $confirm_token;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $confirmed = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -122,6 +132,7 @@ class Subscriber implements \JsonSerializable
             'creation_date' => $this->creation_date,
             'school' => $this->school->getId(),
             'unsubscribe_token' => $this->unsubscribe_token,
+            'confirm_token' => $this->confirm_token,
         ];
     }
 
@@ -133,6 +144,30 @@ class Subscriber implements \JsonSerializable
     public function setUnsubscribeToken(string $unsubscribe_token): self
     {
         $this->unsubscribe_token = $unsubscribe_token;
+
+        return $this;
+    }
+
+    public function getConfirmToken(): ?string
+    {
+        return $this->confirm_token;
+    }
+
+    public function setConfirmToken(string $confirm_token): self
+    {
+        $this->confirm_token = $confirm_token;
+
+        return $this;
+    }
+
+    public function getConfirmed(): ?bool
+    {
+        return $this->confirmed;
+    }
+
+    public function setConfirmed(bool $confirmed): self
+    {
+        $this->confirmed = $confirmed;
 
         return $this;
     }

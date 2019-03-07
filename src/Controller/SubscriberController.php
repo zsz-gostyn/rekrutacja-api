@@ -47,6 +47,7 @@ class SubscriberController extends AbstractController
         
         $tokenGenerator = new TokenGenerator();
         $subscriber->setUnsubscribeToken($tokenGenerator->generateToken(32));
+        $subscriber->setConfirmToken($tokenGenerator->generateToken(32));
 
         $form = $this->createForm(SubscriberType::class, $subscriber);
         $form->submit(json_decode($request->getContent(), true));
@@ -104,6 +105,26 @@ class SubscriberController extends AbstractController
 
         return $this->json([
             'message' => 'Subskrybent usunięty',
+        ], Response::HTTP_OK);
+    }
+
+    public function confirm(Request $request, $token)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $subscriber = $entityManager->getRepository(Subscriber::class)->findOneBy(['confirm_token' => $token]);
+
+        if (!$subscriber) {
+            return $this->json([
+                'message' => 'Subskrybent o podanym tokenie nie istnieje',
+            ], Response::HTTP_NOT_FOUND);
+        }
+        
+        $subscriber->setConfirmed(true);
+        $entityManager->persist($subscriber);
+        $entityManager->flush();
+
+        return $this->json([
+            'message' => 'Aktywowano subskrypcję',
         ], Response::HTTP_OK);
     }
 }

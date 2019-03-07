@@ -61,6 +61,12 @@ api_subscriber_delete_upon_token:
     requirements:
         token: '^[A-Za-z0-9]{32}$'
 
+api_subscriber_confirm:
+    path: /subscribers/confirm/{token}
+    controller: App\Controller\SubscriberController::confirm
+    methods: [GET]
+    requirements:
+        token: '^[A-Za-z0-9]{32}$'
 
 api_school_show_all:
     path: /schools
