@@ -58,12 +58,20 @@ W skład aplikacji wchodzą następujące zasoby:
 
 - subscribers - zasób ten przechowuje informacje na temat danego subskrybenta. Subskrybentem jest użytkownik, który wyraził chęć informowania go o przebiegu rekrutacji i zgodził się podać swoje dane.
 
-  | Nazwa pola | Opis pola                                                    | Typ                            | Wymagane |
-  | ---------- | ------------------------------------------------------------ | ------------------------------ | -------- |
-  | first_name | Imię                                                         | Tekst (maksymalnie 255 znaków) | Tak      |
-  | surname    | Nazwisko                                                     | Tekst (maksymalnie 255 znaków) | Tak      |
-  | email      | E-mail                                                       | E-mail                         | Tak      |
-  | school     | Identyfikator szkoły; identyfikator zostanie zwrócony podczas dodania szkoły | Identyfikator liczbowy         | Tak      |
+  | Nazwa pola | Opis pola                                                    | Typ                            | Wymagane                                                     |
+  | ---------- | ------------------------------------------------------------ | ------------------------------ | ------------------------------------------------------------ |
+  | first_name | Imię                                                         | Tekst (maksymalnie 255 znaków) | Tak                                                          |
+  | surname    | Nazwisko                                                     | Tekst (maksymalnie 255 znaków) | Tak                                                          |
+  | email      | E-mail                                                       | E-mail                         | Tak                                                          |
+  | school     | Identyfikator szkoły; identyfikator zostanie zwrócony podczas dodania szkoły | Identyfikator liczbowy         | Tak                                                          |
+  | confirmed  | Przechowuje informację na temat tego, czy subskrybent potwierdził rejestrację, czy nie. | Wartość logiczna               | Tego pola nie podaje się w formularzu, jest ono obsługiwane przez API w inny sposób. |
+
+  Subskrybenci dysponują także innymi właściwościami - a mianowicie tokenami bezpieczeństwa, które są generowane podczas rejestracji użytkownika. Subskrybent będzie musiał podać odpowiedni token przy potwierdzeniu rejestracji konta oraz przy jego ewentualnym usuwaniu. Tokenów tych nie wysyła się w treści zapytania, ale w adresie URL.
+
+  | Nazwa pola        | Opis pola                                                    | Typ                             |
+  | ----------------- | ------------------------------------------------------------ | ------------------------------- |
+  | unsubscribe_token | Token, który należy podać podczas usuwania subskrybcji       | Tekst (32 znaki alfanumeryczne) |
+  | confirm_token     | Token, który należy podać podczas potwierdzenia rejestracji konta | Tekst (32 znaki alfanumeryczne) |
 
 Każdy zasób posiada dodatkowo pole **id**, które służy do jego identyfikacji.
 
@@ -94,13 +102,14 @@ Na wyżej wymienionych zasobach wykonuje się akcje. Można przykładowo: dodać
 
 - subscribers
 
-  | Metoda HTTP | Ścieżka              | Opis                                                         | Wymagane uprawnienia                          | Zwracany status HTTP                                         |
-  | ----------- | -------------------- | ------------------------------------------------------------ | --------------------------------------------- | ------------------------------------------------------------ |
-  | GET         | /subscribers         | Pobiera informacje na temat wszystkich subskrybentów. Domyślnie wypisywane są dwaj subskrybenci. Aby to zmienić, należy zapoznać się z sekcją *Stronnicowanie*. Liczba wszystkich istniejących postów znajduje się w polu **count** odpowiedzi. Natomiast dane prezentujące poszczególnych subskrybentów znajdują się w polu **data** odpowiedzi. | Tylko administrator może wykonać tę operację  | **200 (OK)** w razie powodzenia                              |
-  | GET         | /subscribers/{id}    | Pobiera informacje na temat konkretnego subskrybenta (w miejsce {id} należy wstawić liczbowy identyfikator szkoły). | Tylko administrator może wykonać tę operację  | **200 (OK)** w razie powodzenia; **404 (Not Found)** w przypadku, gdy subskrybent o podanym id nie istnieje |
-  | POST        | /subscribers         | Dodaje nowego subskrybenta. Lista wymaganych pól znajduje się w sekcji *Zasoby*. | Każdy może wykonać tę operację                | **201 (Created)** w razie powodzenia; **400 (Bad Request)** w przypadku, gdy subskrybent o podanym id nie istnieje |
-  | DELETE      | /subscribers/{id}    | Usuwa subskrybenta o podanym id.                             | Tylko administrator może wykonać tę operację. | **200 (OK)** w razie powodzenia; **404 (Not Found)** w przypadku, gdy subskrybent o podanym id nie istnieje. |
-  | DELETE      | /subscribers/{token} | Usuwa subskrybenta o podanym tokenie subskrybcji. Token ten (nie mylić z tokenem do uwierzytelniania użytkowników, tj. administratorów!) jest łańcuchem składającym się z małych, dużych liter oraz cyfr i ma długość dokładnie 32 znaków. | Każdy może wykonać tę operację.               | **200 (OK)** w razie powodzenia; **404 (Not Found)** w przypadku, gdy subskrybent o podanym id nie istnieje. |
+  | Metoda HTTP | Ścieżka                      | Opis                                                         | Wymagane uprawnienia                          | Zwracany status HTTP                                         |
+  | ----------- | ---------------------------- | ------------------------------------------------------------ | --------------------------------------------- | ------------------------------------------------------------ |
+  | GET         | /subscribers                 | Pobiera informacje na temat wszystkich subskrybentów. Domyślnie wypisywane są dwaj subskrybenci. Aby to zmienić, należy zapoznać się z sekcją *Stronnicowanie*. Liczba wszystkich istniejących postów znajduje się w polu **count** odpowiedzi. Natomiast dane prezentujące poszczególnych subskrybentów znajdują się w polu **data** odpowiedzi. | Tylko administrator może wykonać tę operację  | **200 (OK)** w razie powodzenia                              |
+  | GET         | /subscribers/{id}            | Pobiera informacje na temat konkretnego subskrybenta (w miejsce {id} należy wstawić liczbowy identyfikator szkoły). | Tylko administrator może wykonać tę operację  | **200 (OK)** w razie powodzenia; **404 (Not Found)** w przypadku, gdy subskrybent o podanym id nie istnieje |
+  | POST        | /subscribers                 | Dodaje nowego subskrybenta. Lista wymaganych pól znajduje się w sekcji *Zasoby*. | Każdy może wykonać tę operację                | **201 (Created)** w razie powodzenia; **400 (Bad Request)** w przypadku, gdy subskrybent o podanym id nie istnieje |
+  | DELETE      | /subscribers/{id}            | Usuwa subskrybenta o podanym id.                             | Tylko administrator może wykonać tę operację. | **200 (OK)** w razie powodzenia; **404 (Not Found)** w przypadku, gdy subskrybent o podanym id nie istnieje. |
+  | DELETE      | /subscribers/{token}         | Usuwa subskrybenta o podanym tokenie subskrybcji. Token ten (nie mylić z tokenem do uwierzytelniania użytkowników, tj. administratorów!) jest łańcuchem składającym się z małych, dużych liter oraz cyfr i ma długość dokładnie 32 znaków. | Każdy może wykonać tę operację.               | **200 (OK)** w razie powodzenia; **404 (Not Found)** w przypadku, gdy subskrybent o podanym id nie istnieje. |
+  | GET         | /subscribers/confirm/{token} | Potwierdza rejestrację subskrybenta przy pomocy tokenu **confirm_token**. | Każdy może wykonać tę operację                | **200 (OK)** w razie powodzenia; **404 (Not Found)** w przypadku, gdy subskrybent o podanym tokenie nie istnieje. |
 
 ### Statusy HTTP odpowiedzi
 

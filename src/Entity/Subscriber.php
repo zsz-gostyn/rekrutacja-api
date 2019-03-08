@@ -133,6 +133,7 @@ class Subscriber implements \JsonSerializable
             'school' => $this->school->getId(),
             'unsubscribe_token' => $this->unsubscribe_token,
             'confirm_token' => $this->confirm_token,
+            'confirmed' => $this->confirmed,
         ];
     }
 
