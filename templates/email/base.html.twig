@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+            <meta charset="utf-8">
+            <title>{% block title %}{% endblock %}</title>
+        {% endblock %}
+    </head>
+    <body>
+        <main>
+            {% block main %}{% endblock %}
+        </main>
+        <footer>
+            {% block footer %}
+                Pozdrawiamy,
+                <a href="http://zsz-gostyn.com.pl/">Zespół Szkół Zawodowych im. Powstańców Wielkopolskich w Gostyniu</a>
+            {% endblock %}
+        </footer>
+    </body>
+</html>

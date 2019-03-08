@@ -1,0 +1,19 @@
+{% extends "email/base.html.twig" %}
+
+{% block title %} Pomyślnie zarejestrowano {% endblock %}
+
+{% block main %}
+    <h1>Pomyślnie zarejestrowano</h1>
+    <p>
+        Witaj {{ first_name }}! Cieszymy się, że jesteś zainteresowany subskrybcją naszego programu rekrutacyjnego. Dzięki temu będziemy mogli informować Cię na temat przebiegu rekrutacji i nic nie powinno ukmnąć Twojej uwadze.
+    </p>
+    <p>
+        Aby dokończyć proces rejestracji, musisz aktywować swoje konto. Aby to zrobić, w formularzu <em>Potwierdź rejestrację</em> musisz podać następujący klucz: <strong>{{ confirm_token }}</strong>
+    </p>
+    <p>
+        Jeżeli chciałbyś usunąć swoje konto, musisz w formlarzu <em>Usuń subskrybcję</em> podać następujący klucz: <strong>{{ unsubscribe_token }}</strong>
+    </p>
+    <p>
+        Mamy nadzieję, że nasza aplikacja przypadnie Ci do gustu.
+    </p>
+{% endblock %}

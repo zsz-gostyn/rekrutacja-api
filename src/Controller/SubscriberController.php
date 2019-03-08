@@ -40,7 +40,7 @@ class SubscriberController extends AbstractController
         ], Response::HTTP_OK);
     }
 
-    public function add(Request $request)
+    public function add(Request $request, \Swift_Mailer $mailer)
     {
         $subscriber = new Subscriber();
         $subscriber->setCreationDate(new \DateTime());
@@ -58,7 +58,23 @@ class SubscriberController extends AbstractController
             $entityManager->persist($subscriber);
             $entityManager->flush();
 
-            //TODO: Send Email
+            $message = (new \Swift_Message('Potwierdzenie rejestracji w aplikacji ZSZ-Rekrutacja'))
+                ->setFrom($this->getParameter('sender_email'))
+                ->setTo($subscriber->getEmail())
+                ->setBody(
+                    $this->renderView(
+                        'email/registration.html.twig',
+                        [
+                            'first_name' => $subscriber->getFirstName(),
+                            'unsubscribe_token' => $subscriber->getUnsubscribeToken(),
+                            'confirm_token' => $subscriber->getConfirmToken(),
+                        ]
+                    ),
+                    'text/html'
+                );
+
+            $mailer->send($message);
+
 
             return $this->json([
                 'data' => $subscriber
