@@ -29,6 +29,12 @@ api_post_delete:
     requirements:
         id: '\d+'
 
+api_post_notification_send:
+    path: /posts/{id}/notification
+    controller: App\Controller\PostController::sendNotifications
+    methods: [POST]
+    requirements:
+        id: '\d+'
 
 api_subscriber_show_all:
     path: /subscribers

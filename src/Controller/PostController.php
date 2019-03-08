@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Post;
+use App\Entity\Subscriber;
 use App\Form\PostType;
 
 class PostController extends AbstractController
@@ -38,6 +39,13 @@ class PostController extends AbstractController
             return $this->json([
                 'message' => 'Post o podanym id nie istnieje',
             ], Response::HTTP_NOT_FOUND);
+        }
+
+        $isAdmin = $this->isGranted('ROLE_ADMIN');
+        if (!$post->getActive() && !$isAdmin) {
+            return $this->json([
+                'message' => 'Tylko administrator ma dostęp do tego zasobu',
+            ], Response::HTTP_UNAUTHORIZED);
         }
 
         return $this->json([
@@ -115,5 +123,44 @@ class PostController extends AbstractController
         return $this->json([
             'message' => 'Post usunięty',
         ], Result::HTTP_OK);
+    }
+
+    public function sendNotifications($id, \Swift_Mailer $mailer)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $post = $entityManager->getRepository(Post::class)->find($id);
+
+        if (!$post) {
+            return $this->json([
+                'message' => 'Post o podanym id nie istnieje',
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $subscribers = $entityManager->getRepository(Subscriber::class)->findBy(['confirmed' => true]); // Send emails only to confirmed subscribers
+
+        $message = (new \Swift_Message($post->getTopic()))
+            ->setFrom($this->getParameter('sender_email'))
+            ->setBody(
+                $this->renderView(
+                    'email/notification.html.twig',
+                    [
+                        'topic' => $post->getTopic(),
+                        'content' => $post->getContent(),
+                        'creation_date' => $post->getCreationDate(),
+                    ]
+                ),
+                'text/html'
+            );
+
+        foreach ($subscribers as $subscriber) {
+            $message->setTo($subscriber->getEmail());
+
+            $mailer->send($message);
+        }
+
+        return $this->json([
+            'message' => 'Powiadomienie dodane do wysyłki',
+            'adresaci' => $subscribers,
+        ], Response::HTTP_OK);
     }
 };

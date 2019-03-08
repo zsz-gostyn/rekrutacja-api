@@ -41,7 +41,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/posts, roles: ROLE_ADMIN, methods: [POST, PUT, DELETE] }
-        - { path: ^/subscribers/confirm, roles: [IS_AUTHENTICATED_ANONYMOUSLY, ROLE_ADMIN], methods: [GET] }
+        - { path: ^/subscribers/confirm, roles: [IS_AUTHENTICATED_ANONYMOUSLY, ROLE_USER], methods: [GET] }
         - { path: ^/subscribers, roles: ROLE_ADMIN, methods: [GET] }
         - { path: ^/subscribers/\d+, roles: ROLE_ADMIN, methods: [DELETE] }
         - { path: ^/schools, roles: ROLE_ADMIN, methods: [PUT, DELETE] }

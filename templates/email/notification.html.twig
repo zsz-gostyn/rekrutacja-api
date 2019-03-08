@@ -1,0 +1,12 @@
+{% extends "email/base.html.twig" %}
+
+{% block title %}{{ topic }}{% endblock %}
+
+{% block main %}
+    <h1>{{ topic }}</h1>
+    {{ content }}
+{% endblock %}
+
+{% block timestamp %}
+    Informację dodano {{ creation_date }}
+{% endblock %}
