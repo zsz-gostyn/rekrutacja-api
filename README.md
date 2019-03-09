@@ -133,10 +133,10 @@ W odpowiedzi serwera, przy akcjach, które tego wymagają, zwrócone mogą zosta
 
 ### Stronnicowanie
 
-Stronnicowanie jest stosowane w przypadku akcji zwracających listę wielu zasobów (na przykład listę wszystkich szkół). Zapobiega ono przeciążeniu serwera. Domyślnie zwracane są dwa pierwsze rekordy. Aby to zmienić, należy posłużyć się parametrami adresu URL. Są to:
+Stronnicowanie jest stosowane w przypadku akcji zwracających listę wielu zasobów (na przykład listę wszystkich szkół). Zapobiega ono zwracaniu zbyt dużej ilości danych na raz (w tym danych, które nie interesują użytkownika). Domyślnie zwracane są dwa pierwsze rekordy. Aby to zmienić, należy posłużyć się parametrami adresu URL. Są to:
 
-- offset - przesunięcie, określa który rekord zostanie wypisany jako pierwszy. Domyślnie jest to 0
-- limit - liczba zwracanych rekordów. Domyślnie jest to 2
+- offset - przesunięcie, określa który rekord zostanie wypisany jako pierwszy. Domyślnie jest to 0, a więc pierwszy rekord w bazie danych jest też pierwszym zwracanym przez API.
+- limit - liczba zwracanych rekordów. Domyślnie zwracane są wszystkie rekordy.
 
 Przykład: przygotowujemy w aplikacji listę szkół. Wyświetlamy je 5 per strona. Aby pobrać dane, które zostaną wyświetlone na stronie trzeciej, należy wykonać takie zapytanie:
 **GET /schools?offset=10&limit=5**
