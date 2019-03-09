@@ -33,6 +33,11 @@ class School implements \JsonSerializable
      */
     private $accepted;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $creation_date;
+
     public function __construct()
     {
         $this->subscribers = new ArrayCollection();
@@ -92,6 +97,7 @@ class School implements \JsonSerializable
             'id' => $this->id,
             'name' => $this->name,
             'accepted' => $this->accepted,
+            'creation_date' => $this->creation_date,
         ];
     }
 
@@ -103,6 +109,18 @@ class School implements \JsonSerializable
     public function setAccepted(bool $accepted): self
     {
         $this->accepted = $accepted;
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->creation_date;
+    }
+
+    public function setCreationDate(\DateTimeInterface $creation_date): self
+    {
+        $this->creation_date = $creation_date;
 
         return $this;
     }

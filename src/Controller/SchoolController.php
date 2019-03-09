@@ -50,6 +50,7 @@ class SchoolController extends AbstractController
         $isAdmin = $this->isGranted('ROLE_ADMIN');
 
         $school = new School();
+        $school->setCreationDate(new \DateTime());
 
         $form = $this->createForm(SchoolType::class, $school);
         $form->submit(json_decode($request->getContent(), true));

@@ -25,20 +25,19 @@ class SubscriberRepository extends ServiceEntityRepository
         return $persister->count($criteria);
     }
     
-    public function getExpiredSubscribers($ageLimit): array
+    public function getUnwantedSubscribers($ageLimit): array
     {
         $now = new \DateTime();
         $interval = new \DateInterval('PT' . $ageLimit . 'S');
 
-        $maxDate = $now->sub($interval)->format('Y-m-dTH:i:s');
-        $maxDate = '2019-03-09T13:40:13+00:00';
-
+        $maxDate = $now->sub($interval)->format('Y-m-d H:i:s');
+        
         $queryBuilder = $this->createQueryBuilder('s')
             ->andWhere('s.creation_date < :max_date_time')
             ->setParameter('max_date_time', $maxDate)
             ->andWhere('s.confirmed = false')
             ->getQuery();
-
+        
         return $queryBuilder->execute();
     }
 

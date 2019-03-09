@@ -29,7 +29,7 @@ class ClearSpamCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $ageLimit = $input->getArgument('age-limit');
-        $subscribers = $this->entityManager->getRepository(Subscriber::class)->getExpiredSubscribers($ageLimit);
+        $subscribers = $this->entityManager->getRepository(Subscriber::class)->getUnwantedSubscribers($ageLimit);
         
         foreach ($subscribers as $subscriber) {
             $this->entityManager->remove($subscriber);
@@ -37,11 +37,12 @@ class ClearSpamCommand extends Command
         
         $this->entityManager->flush();
 
-        //TODO: remove only expired school
-        $unassignedSchools = $this->entityManager->getRepository(School::class)->getUnassignedSchools();
+        $unassignedSchools = $this->entityManager->getRepository(School::class)->getUnwantedSchools($ageLimit);
         foreach ($unassignedSchools as $school) {
             $this->entityManager->remove($school);
+            $output->writeln([$school->getName()]);
         }
 
+        $this->entityManager->flush();
     }
 }

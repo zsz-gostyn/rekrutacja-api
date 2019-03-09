@@ -26,11 +26,20 @@ class SchoolRepository extends ServiceEntityRepository
         return $persister->count($criteria);
     }
     
-    public function getUnassignedSchools(): array
+    public function getUnwantedSchools($ageLimit): array
     {
-        $entityManager = $this->getEntityManager();
-        $schools = $entityManager->getRepository(School::class)->findAll();
+        $now = new \DateTime();
+        $interval = new \DateInterval('PT' . $ageLimit . 'S');
 
+        $maxDate = $now->sub($interval)->format('Y-m-d H:i:s');
+
+        $entityManager = $this->getEntityManager();
+        $schools = $this->createQueryBuilder('s')
+            ->andWhere('s.creation_date < :max_date')
+            ->setParameter('max_date', $maxDate)
+            ->getQuery()
+            ->execute();
+        
         foreach ($schools as $key => $school) {
             if (!$school->getSubscribers()->isEmpty()) {
                 unset($schools[$key]);
