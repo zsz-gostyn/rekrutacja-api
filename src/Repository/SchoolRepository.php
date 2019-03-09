@@ -37,6 +37,7 @@ class SchoolRepository extends ServiceEntityRepository
         $schools = $this->createQueryBuilder('s')
             ->andWhere('s.creation_date < :max_date')
             ->setParameter('max_date', $maxDate)
+            ->andWhere('s.accepted = false')
             ->getQuery()
             ->execute();
         
