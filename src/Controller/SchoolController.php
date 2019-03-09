@@ -14,15 +14,15 @@ class SchoolController extends AbstractController
     public function showAll(Request $request)
     {
         $isAdmin = $this->isGranted('ROLE_ADMIN');
-
-        $limit = $request->get('limit', 2);
-        $offset = $request->get('offset', 0);
+        $criteria = $isAdmin ? [] : ['accepted' => true];
         
         $repository = $this->getDoctrine()->getManager()->getRepository(School::class);
-
-        $criteria = $isAdmin ? [] : ['accepted' => true];
-        $schools = $repository->findBy($criteria, [], $limit, $offset);
         $totalSchoolsAmount = $repository->countBy($criteria);
+        
+        $limit = $request->get('limit', $totalSchoolsAmount);
+        $offset = $request->get('offset', 0);
+
+        $schools = $repository->findBy($criteria, [], $limit, $offset);
 
         return $this->json([
             'data' => $schools,

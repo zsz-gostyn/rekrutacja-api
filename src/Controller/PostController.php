@@ -15,15 +15,15 @@ class PostController extends AbstractController
     public function showAll(Request $request)
     {
         $isAdmin = $this->isGranted('ROLE_ADMIN');
-
-        $offset = $request->get('offset', 0);
-        $limit = $request->get('limit', 2);
+        $criteria = $isAdmin ? [] : ['active' => true];
         
         $repository = $this->getDoctrine()->getRepository(Post::class);
-
-        $criteria = $isAdmin ? [] : ['active' => true];
-        $posts = $repository->findBy($criteria, [], $limit, $offset);
         $totalPostsAmount = $repository->countBy($criteria);
+        
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', $totalPostsAmount);
+        
+        $posts = $repository->findBy($criteria, [], $limit, $offset);
 
         return $this->json([
             'data' => $posts,

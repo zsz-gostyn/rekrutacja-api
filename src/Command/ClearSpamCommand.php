@@ -40,7 +40,6 @@ class ClearSpamCommand extends Command
         $unassignedSchools = $this->entityManager->getRepository(School::class)->getUnwantedSchools($ageLimit);
         foreach ($unassignedSchools as $school) {
             $this->entityManager->remove($school);
-            $output->writeln([$school->getName()]);
         }
 
         $this->entityManager->flush();

@@ -12,12 +12,13 @@ class SubscriberController extends AbstractController
 {
     public function showAll(Request $request)
     {
-        $offset = $request->get('offset', 0);
-        $limit = $request->get('limit', 2);
-
         $repository = $this->getDoctrine()->getRepository(Subscriber::class);
-        $subscribers = $repository->findBy([], [], $limit, $offset);
         $totalSubscribersAmount = $repository->countBy([]);
+
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', $totalSubscribersAmount);
+
+        $subscribers = $repository->findBy([], [], $limit, $offset);
 
         return $this->json([
             'data' => $subscribers,
