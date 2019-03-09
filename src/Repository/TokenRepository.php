@@ -18,6 +18,18 @@ class TokenRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Token::class);
     }
+    
+    public function getInvalidTokens()
+    {
+        $tokens = $this->findAll();
+        foreach ($tokens as $key => $token) {
+            if ($token->isValid()) {
+                unset($tokens[$key]);
+            }
+        }
+
+        return $tokens;
+    }
 
     // /**
     //  * @return Token[] Returns an array of Token objects

@@ -8,10 +8,11 @@ use Symfony\Component\Console\Input\InputArgument;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Subscriber;
 use App\Entity\School;
+use App\Entity\Token;
 
-class ClearSpamCommand extends Command
+class CleanDatabaseCommand extends Command
 {
-    protected static $defaultName = 'app:clear-spam';
+    protected static $defaultName = 'app:clean-database';
     
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -21,9 +22,9 @@ class ClearSpamCommand extends Command
 
     protected function configure()
     {
-        $this->setDescription('Clear unwanted resources');
-        $this->setHelp('This command allows you to clear unwanted resources');
-        $this->addArgument('age-limit', InputArgument::OPTIONAL, 'Resource\'s age limit', 86400); // 86400 seconds equals one day
+        $this->setDescription('Czyści bazę danych z niepotrzebnych zasobów');
+        $this->setHelp('Ta komenda pozwala Ci wyczyścić bazę danych z niepotrzebnych zasobów');
+        $this->addArgument('age-limit', InputArgument::OPTIONAL, 'Mininalny czas istnienia zasobu', 86400); // 86400 seconds equals one day
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -34,14 +35,19 @@ class ClearSpamCommand extends Command
         foreach ($subscribers as $subscriber) {
             $this->entityManager->remove($subscriber);
         }
-        
         $this->entityManager->flush();
 
         $unassignedSchools = $this->entityManager->getRepository(School::class)->getUnwantedSchools($ageLimit);
         foreach ($unassignedSchools as $school) {
             $this->entityManager->remove($school);
         }
-
         $this->entityManager->flush();
+
+        $invalidTokens = $this->entityManager->getRepository(Token::class)->getInvalidTokens();
+        foreach ($invalidTokens as $invalidToken) {
+            $this->entityManager->remove($invalidToken);
+        }
+        $this->entityManager->flush();
+
     }
 }
