@@ -132,6 +132,7 @@ class Post implements \JsonSerializable
             'content' => $this->content,
             'active' => $this->active,
             'user' => $this->user->getId(),
+            'creation_date' => $this->creation_date,
         ];
     }
 }

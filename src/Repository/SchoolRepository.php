@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\School;
+use App\Entity\Subscriber;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -25,6 +26,20 @@ class SchoolRepository extends ServiceEntityRepository
         return $persister->count($criteria);
     }
     
+    public function getUnassignedSchools(): array
+    {
+        $entityManager = $this->getEntityManager();
+        $schools = $entityManager->getRepository(School::class)->findAll();
+
+        foreach ($schools as $key => $school) {
+            if (!$school->getSubscribers()->isEmpty()) {
+                unset($schools[$key]);
+            }
+        }
+
+        return $schools;
+    }
+
     // /**
     //  * @return School[] Returns an array of School objects
     //  */
