@@ -141,3 +141,23 @@ Stronnicowanie jest stosowane w przypadku akcji zwracających listę wielu zasob
 Przykład: przygotowujemy w aplikacji listę szkół. Wyświetlamy je 5 per strona. Aby pobrać dane, które zostaną wyświetlone na stronie trzeciej, należy wykonać takie zapytanie:
 **GET /schools?offset=10&limit=5**
 
+### Sprzątanie bazy danych
+
+Aplikacja dysponuje komendą konsoli Symfony, która czyści bazę danych z niepotrzebnych informacji. Usuwa ona:
+
+- Przedawnione tokeny uwierzytelniające użytkowników (te, które otrzymuje się po zalogowaniu i które trzeba przekazywać w nagłówku zapytania pod kluczem X-AUTH-TOKEN). Usuwane są wtedy, gdy ich czas ważności minie.
+- Nieaktywne konta subskrybentów - subskrybent jest uważany za nieaktywnego, jeżeli do tej pory nie aktywował swojego konta (poprzez potwierdzenie rejestracji), a został zarejestrowany już jakiś czas temu (domyślnie jest to doba).
+- Nieprzypisane konta szkół - nieprzypisane do żadnego subskrybenta szkoły są usuwane, chyba że minimalny czas od ich utworzenia (domyślnie doba) również nie minął, albo konto ma status accepted (czyli zostało utworzone lub zatwierdzone przez administratora i przystosowane do wyświetlania użytkownikom na liście do wyboru).
+
+Aby uruchomić komendę sprzątającą bazę danych, należy posłużyć się poleceniem (dla przykładu, uruchamiamy komendę z głównego katalogu projektu):
+
+```bash
+$ php bin/console app:clean-database
+```
+
+Można też podać dodatkowy parametr, który określi limit wieku zasobów - tzn. po jakim czasie ich istnienia, będą przeznaczone do usunięcia. Określa się go w sekundach. Domyślnie jest to 86400 sekund, czyli doba. Aby użytkownicy byli usuwani po dwóch dobach, można skorzystać z polecenia:
+
+```bash
+$ php bin/console app:clean-database 172800
+```
+
