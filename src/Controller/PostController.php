@@ -114,7 +114,7 @@ class PostController extends AbstractController
         if (!$post) {
             return $this->json([
                 'message' => 'Post o podanym id nie istnieje',
-            ], Result::HTTP_NOT_FOUND);
+            ], Response::HTTP_NOT_FOUND);
         }
 
         $entityManager->remove($post);
@@ -122,7 +122,7 @@ class PostController extends AbstractController
 
         return $this->json([
             'message' => 'Post usunięty',
-        ], Result::HTTP_OK);
+        ], Response::HTTP_OK);
     }
 
     public function sendNotifications($id, \Swift_Mailer $mailer)
