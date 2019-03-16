@@ -46,6 +46,11 @@ class Post implements \JsonSerializable
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $updates_count = 0;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -133,6 +138,26 @@ class Post implements \JsonSerializable
             'active' => $this->active,
             'user' => $this->user->getId(),
             'creation_date' => $this->creation_date,
+            'updates_count' => $this->updates_count,
         ];
+    }
+
+    public function getUpdatesCount(): ?int
+    {
+        return $this->updates_count;
+    }
+
+    public function setUpdatesCount(int $updates_count): self
+    {
+        $this->updates_count = $updates_count;
+
+        return $this;
+    }
+
+    public function incrementUpdatesCount(): self
+    {
+        $this->updates_count += 1;
+
+        return $this;
     }
 }

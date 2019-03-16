@@ -88,10 +88,12 @@ class PostController extends AbstractController
                 'message' => 'Post o podanym id nie istnieje'
             ], Response::HTTP_NOT_FOUND);
         }
+        
+        $post->incrementUpdatesCount();
 
         $form = $this->createForm(PostType::class, $post);
         $form = $form->submit(json_decode($request->getContent(), true));
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
