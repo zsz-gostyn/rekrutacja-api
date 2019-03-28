@@ -127,7 +127,7 @@ class PostController extends AbstractController
         ], Response::HTTP_OK);
     }
 
-    public function sendNotifications($id, \Swift_Mailer $mailer)
+    public function sendNotifications($id, $queueMailer)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $post = $entityManager->getRepository(Post::class)->find($id);
@@ -157,7 +157,7 @@ class PostController extends AbstractController
         foreach ($subscribers as $subscriber) {
             $message->setTo($subscriber->getEmail());
 
-            $mailer->send($message);
+            $queueMailer->send($message);
         }
 
         return $this->json([

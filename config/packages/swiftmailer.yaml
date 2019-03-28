@@ -1,3 +1,9 @@
 swiftmailer:
-    url: '%env(MAILER_URL)%'
-    spool: { type: 'file' }
+    default_mailer: instant_mailer
+    mailers:
+        instant_mailer:
+            url: '%env(MAILER_URL)%'
+            spool: { type: 'memory' }
+        queue_mailer:
+            url: '%env(MAILER_URL)%'
+            spool: { type: 'file' }

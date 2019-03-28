@@ -8,12 +8,12 @@
         Witaj {{ first_name }}! Cieszymy się, że jesteś zainteresowany subskrybcją naszego programu rekrutacyjnego. Dzięki temu będziemy mogli informować Cię na temat przebiegu rekrutacji i nic nie powinno ukmnąć Twojej uwadze.
     </p>
     <p>
-        Aby dokończyć proces rejestracji, musisz aktywować swoje konto. Aby to zrobić, w formularzu <em>Potwierdź rejestrację</em> musisz podać następujący klucz: <strong>{{ confirm_token }}</strong>
+        Aby dokończyć proces rejestracji, musisz aktywować swoje konto. Aby to zrobić otwórz następujący link: <a href="{{ confirm_url }}">Potwierdź rejestrację</a>
     </p>
     <p>
-        Jeżeli chciałbyś usunąć swoje konto, musisz w formlarzu <em>Usuń subskrybcję</em> podać następujący klucz: <strong>{{ unsubscribe_token }}</strong>
+        Jeżeli chciałbyś kiedyś usunąć swoje konto, otwórz poniższy link: <a href="{{ unsubscribe_url }}">Usuń konto</a>
     </p>
     <p>
-        Mamy nadzieję, że nasza aplikacja przypadnie Ci do gustu.
+        Mamy nadzieję, że nasza aplikacja przypadnie Ci do gustu. Życzymy miłych wrażeń podczas korzystania z niej!
     </p>
 {% endblock %}

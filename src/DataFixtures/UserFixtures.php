@@ -19,13 +19,15 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $userCredentials = ['admin', 'admin2', 'dyrektor']; // Username and passwords are the same
+        $usersCredentials = [
+            ['username' => 'admin', 'password' => 'admin'],
+        ];
         
-        foreach ($userCredentials as $element) {
+        foreach ($usersCredentials as $element) {
             $user = new User();
 
-            $user->setUsername($element);
-            $encodedPassword = $this->passwordEncoder->encodePassword($user, $element);
+            $user->setUsername($element['username']);
+            $encodedPassword = $this->passwordEncoder->encodePassword($user, $element['password']);
             $user->setPassword($encodedPassword);
             $user->setRoles(['ROLE_ADMIN']);
 

@@ -5,13 +5,17 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     sender_email: '%env(SENDER_EMAIL)%'
+    unsubscribe_url: '%env(UNSUBSCRIBE_URL)%'
+    confirm_url: '%env(CONFIRM_URL)%'
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-
+        bind:
+            $instantMailer: '@swiftmailer.mailer.instant_mailer'
+            $queueMailer: '@swiftmailer.mailer.queue_mailer'
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
