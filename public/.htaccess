@@ -17,9 +17,20 @@ DirectoryIndex index.php
     Options -MultiViews
 </IfModule>
 
+# Set up CORS
+<IfModule mod_headers.c>
+    Header always set Access-Control-Allow-Origin "*"
+    Header always set Access-Control-Allow-Headers "*"
+    Header always set Access-Control-Allow-Methods "GET,POST,PUT,DELETE,OPTIONS"
+</IfModule>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Respond with 200 on every OPTIONS request
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^(.*)$ $1 [R=200,L]
+    
     # Determine the RewriteBase automatically and set it as environment variable.
     # If you are using Apache aliases to do mass virtual hosting or installed the
     # project in a subdirectory, the base path will be prepended to allow proper
@@ -55,6 +66,7 @@ DirectoryIndex index.php
 
     # Rewrite all other queries to the front controller.
     RewriteRule ^ %{ENV:BASE}/index.php [L]
+
 </IfModule>
 
 <IfModule !mod_rewrite.c>
@@ -67,8 +79,3 @@ DirectoryIndex index.php
     </IfModule>
 </IfModule>
 
-# Set up CORS
-<IfModule mod_headers.c>
-    Header set Access-Control-Allow-Origin "*"
-    Header set Access-Control-Allow-Methods "GET,POST,PUT,DELETE"
-</IfModule>
