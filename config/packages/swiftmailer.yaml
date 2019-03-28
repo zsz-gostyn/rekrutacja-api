@@ -1,5 +1,5 @@
 swiftmailer:
-    default_mailer: instant_mailer
+    default_mailer: queue_mailer
     mailers:
         instant_mailer:
             url: '%env(MAILER_URL)%'
@@ -7,3 +7,4 @@ swiftmailer:
         queue_mailer:
             url: '%env(MAILER_URL)%'
             spool: { type: 'file' }
+            logging: true

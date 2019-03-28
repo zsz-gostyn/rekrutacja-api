@@ -23,7 +23,7 @@ class PostController extends AbstractController
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', $totalPostsAmount);
         
-        $posts = $repository->findBy($criteria, [], $limit, $offset);
+        $posts = $repository->findBy($criteria, ['ordinal' => 'DESC'], $limit, $offset);
 
         return $this->json([
             'data' => $posts,
@@ -88,7 +88,7 @@ class PostController extends AbstractController
                 'message' => 'Post o podanym id nie istnieje'
             ], Response::HTTP_NOT_FOUND);
         }
-        
+
         $post->incrementUpdatesCount();
 
         $form = $this->createForm(PostType::class, $post);
@@ -138,6 +138,7 @@ class PostController extends AbstractController
             ], Response::HTTP_NOT_FOUND);
         }
 
+        $post->incrementNotificationsCount();
         $subscribers = $entityManager->getRepository(Subscriber::class)->findBy(['confirmed' => true]); // Send emails only to confirmed subscribers
 
         $message = (new \Swift_Message($post->getTopic()))
@@ -160,9 +161,10 @@ class PostController extends AbstractController
             $queueMailer->send($message);
         }
 
+        $entityManager->flush();
+
         return $this->json([
             'message' => 'Powiadomienie dodane do wysyłki',
-            'adresaci' => $subscribers,
         ], Response::HTTP_OK);
     }
 };
